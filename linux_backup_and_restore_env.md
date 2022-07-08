@@ -66,7 +66,7 @@ linux莫名其妙崩溃，型号是dell 7920，具体表现是界面卡死，键
 
 首先高版本的驱动兼容低版本的cuda，所以不用纠结驱动提示cuda和实际安装cuda是否一致
 
-#####  驱动
+##### 驱动
 
 1. 下载驱动
    [website](https://link.segmentfault.com/?enc=O1qf%2BsP1st%2BtXy5KX%2Fh0YQ%3D%3D.hZ9h%2FhEttwki%2F7KNeD6Dj%2BIhZYlCrEoKeJKSiYB3nJbiE%2FsiMbKAYmBOuJaUBnALGYpH%2F41WON%2BQZMwwrHXlLQKR%2Fv96mWh6uqtltQggHSj4uRLXZG0FxM4XUzPHnLMAOgaLwNhr%2FIlPChB4TPRXhw%3D%3D)
@@ -128,61 +128,63 @@ linux莫名其妙崩溃，型号是dell 7920，具体表现是界面卡死，键
       >
       > 如果显示没有这个文件，就到该文件夹下去看看有没有一个`version.txt`，里面如果有`version.json`，且json中有版本信息，也可以
 
-   3. 环境
+   3. 环境变量设置
 
-      > gedit ~/.bashrc
-      >
-      > 加入如下环境变量(注意修改为自己的路径)：
-      >
-      > export PATH=/usr/local/cuda-11.4/bin\${PATH:+:\${PATH}}
-      > export LD_LIBRARY_PATH=/usr/local/cuda-11.4/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-      >
-      > 保存退出，终端运行：source ~/.bashrc
-      >
-      > 测试:nvcc -V
-
+      ```shell
+      gedit ~/.bashrc
+      
+      加入如下环境变量(注意修改为自己的路径)：
+      export PATH=/usr/local/cuda-11.4/bin\${PATH:+:\${PATH}}
+      export LD_LIBRARY_PATH=/usr/local/cuda-11.4/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+      
+      保存退出，终端运行：source ~/.bashrc
+      
+      测试:nvcc -V
+      ```
+   
    ##### cudnn
-
+   
    选择合适版本
    第一种：Debian File形式的安装
-
+   
    1. 选择ubuntu20的这个三文件下载到本地，
-
+   
    2. 依次执行
-
+   
       > sudo dpkg -i libcudnn8_8.2.2.26-1+cuda11.4_amd64.deb
       > sudo dpkg -i libcudnn8-dev_8.2.2.26-1+cuda11.4_amd64.deb
       > sudo dpkg -i libcudnn8-samples_8.2.2.26-1+cuda11.4_amd64.deb
-
+   
    3. 验证
-
+   
       当选择Debian File进行安装时会在`/usr/src/cudnn_samples_v8`有一些cudnn的例子
-
+   
       在任意目录下展开终端，运行以下命令，通过编译`mnistCUDNN sample`进行验证
-
+   
       > cp -r /usr/src/cudnn_samples_v8/ $HOME
       > cd  $HOME/cudnn_samples_v8/mnistCUDNN
       > make clean && make
       > ./mnistCUDNN
-
+   
       **如果在执行sudo make”时报以下编译错误 ：fatal error: FreeImage.h**
-
+   
       则执行：`sudo apt-get install libfreeimage3 libfreeimage-dev`，然后重新验证。通过有test past
-
+   
    第二种 第二种：Tar File形式的安装
-
+   
    1. 选择cudnn lib for liunx （x86)
-
+   
    2. 解压 > tar -xzvf cudnn-11.4-linux-x64-v8.2.2.26.tgz
-
+   
    3. > sudo cp cuda/include/cudnn.h /usr/local/cuda/include
       > sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64
       > sudo chmod a+r /usr/local/cuda/include/cudnn.h 
       > sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
-
+   
       完成。解压操作会在当前目录生成一个`cuda`文件夹，删除即可。
 
-**多个用户同个cuda**
+##### **多个用户同个cuda**
+
 本人作为超级用户安装完cuda和cudnn，希望其他用户也能正常调用我的程序。
 只需要打开我的目录下.bashrc文件，将我的cuda的环境变量拷贝到其他用户的.bashrc文件下：
 export PATH="/home/zhongjia/cuda9.0/bin:\$PATH"
@@ -190,7 +192,8 @@ export LD_LIBRARY_PATH="/home/zhongjia/cuda9.0/lib64:$LD_LIBRARY_PATH"
 同时需要修改我的相应目录对其他用户有可读取的权限，所以chmod 755 "相应目录下文件名称“，具体可参考
 https://www.cnblogs.com/shangzekai/p/5822907.html修改文件权限。
 修改完成后，其他用户就可以读和执行相应路径下的程序。
-**[Unable to find the development tool `cc`](https://askubuntu.com/questions/1342232/unable-to-find-the-development-tool-cc)**
+
+##### **Unable to find the development tool cc**
 
 sudo apt install build-essential
 
@@ -234,12 +237,13 @@ source /home/student/anaconda3/etc/profile.d/conda.sh
 
 
 
-**共用cuda**
+##### **共用cuda**
+
 在自己的当前环境/usr/local/anaconda3/bin/conda init bash
 
 source .bashrc
 
-**不进入grub界面，或者减少选择时间**
+##### **不进入grub界面，或者减少选择时间**
 
 >  sudo gedit /etc/default/grub
 
@@ -254,7 +258,7 @@ and make sure GRUB_TIMEOUT=10 or some other number bigger than zero. When done e
 >  sudo update-grub
 > 
 
-**配置jupyter虚拟环境并设置密码。**
+##### **配置jupyter虚拟环境并设置密码。**
 
 让jupyter可以包含多个虚拟环境
 
@@ -281,10 +285,11 @@ and make sure GRUB_TIMEOUT=10 or some other number bigger than zero. When done e
 
 #
 
-**/usr/bin/xauth: file /root/.Xauthority does not exist**
+##### **/usr/bin/xauth: file /root/.Xauthority does not exist**
+
 这个不算错误，重新登录即可
 
-**文件后带* 或者文件夹是一种被包裹的选中的状态**
+##### **文件后带* 或者文件夹是一种被包裹的选中的状态**
 
 表示这个文件是可执行文件
 
@@ -296,23 +301,23 @@ and make sure GRUB_TIMEOUT=10 or some other number bigger than zero. When done e
 
 > chown (-R) owner:owner_group xxx
 
-**pycharm 添加快捷方式**
+##### **pycharm 添加快捷方式**
 
 > tools - create desktop entry
 
-**DL framework 对应cuda关系**
+##### **DL framework 对应cuda关系**
 
 tensorflow2.8 对应cuda11.4
 
 torch 1.11或者1.10对应cuda11.3 类似11.4
 
-**ubuntu 弹出硬盘**
+##### **ubuntu 弹出硬盘**
 
  首先使用umount解除所有挂载
 
 > sudo udisksctl power-off -b /dev/sdb
 
-**ubuntu 18.04.5 LTS 安装 NVIDIA 显卡驱动时报错：An NVIDIA kernel module ‘nvidia-drm‘ appears to already be load**
+##### **ubuntu 18.04.5 LTS 安装 NVIDIA 显卡驱动时报错：An NVIDIA kernel module ‘nvidia-drm‘ appears to already be load**
 
 1. 通过另一台主机的终端工具 ssh 登录 Ubuntu 系统，依次执行如下两条命令（设置系统默认进入终端命令模式，然后重启系统）
 
@@ -352,11 +357,11 @@ reboot
 
 ```
 
-**CondaEnvException: Pip failed**
+##### **CondaEnvException: Pip failed**
 
 在-pip : 前面加上`-pip`
 
-**vim 替换**
+##### **vim 替换**
 
 > ```undefined
 > :{作用范围}s/{目标}/{替换}/{替换标志}
@@ -368,7 +373,7 @@ reboot
 
 [refer](https://www.jianshu.com/p/b3b2f04c1897)
 
-**http: //cn.archive.ubuntu.com/ubuntu/dists/focal/InRelease 连接失败 [IP: 91.189.91.38 80\]](https://www.cnblogs.com/dongtian/p/16059002.html)**
+##### http: //cn.archive.ubuntu.com/ubuntu/dists/focal/InRelease 连接失败 IP: 91.189.91.38 80
 
 1. 这是因为[ubuntu](https://so.csdn.net/so/search?q=ubuntu&spm=1001.2101.3001.7020)的服务器在国外，使用国内的软件源在下载时更新受到限制，将服务地址修改成国内的地址。
 
@@ -394,13 +399,13 @@ reboot
 
 4. 保存退出 sudo apt-get update
 
-**下载段错误**
+##### **下载段错误**
 
 解决，由于文件太大引起的中断
 
 > wget -c url
 
-**shell 没有颜色**
+##### **shell 没有颜色**
 
 在`~/.bashrc`中其实有了颜色的设置，查看代码可以发现
 
@@ -410,7 +415,7 @@ reboot
 
 所以可以手动把这个注释去掉，使`force_color_prompt`的值等于`yes`，然后`source ~/.bashrc`就能看到效果了：
 
-**解决linux系统 不在sudoers 文件中，此事将被报告**
+##### **解决linux系统 不在sudoers 文件中，此事将被报告**
 
 [refer](https://zhuanlan.zhihu.com/p/143388819)
 
